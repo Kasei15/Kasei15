@@ -1,3 +1,4 @@
+# my information
 - 👋 Hi, I’m @Kasei15
 - 👀 I’m interested in DevOps and Web Development
 - 🌱 I’m currently learning Web Development
