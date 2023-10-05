@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+     # AccountId:
+     #   Description: Account ID for PortFolio
+     #   Type: String
+     #   Default: ""
+
+     Provider:
+          Description: Name of the template provider
+          Type: String
+          Default: ""
+
+Resources:
+     ########### Portfolio ################
+     ubloxServiceCatalog:
+          Type: AWS::ServiceCatalog::Portfolio
+          Properties:
+               Description: Ublox Portfolio to deploy S3 Bucket with Versioning enabled
+               ProviderName: !Ref Provider
+               DisplayName: Ublox-PortFolio
+
+     ############# Product ################
+
+     UbloxProduct:
+          Type: AWS::ServiceCatalog::PortfolioProductAssociation
+          Properties:
+               PortfolioId: !Ref ubloxServiceCatalog
+               ProductId: Mars

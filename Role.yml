@@ -1,0 +1,16 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Resources:
+  iamRole:
+    Type: AWS::IAM::Role
+    Properties:
+      #  Path:
+      AssumeRolePolicyDocument:
+        Policies:
+          - PolicyName: "sftp-putobject-role"
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: "Allow"
+                  Action: "s3:PutObject"
+                  Resource: "arn:aws:s3:::testpocsftpublox"

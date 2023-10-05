@@ -1,0 +1,78 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: Template to enable versioning, access logs to a specific bucket and apply a custom policy to the bucket
+
+Parameters:
+  #Name of the bucket
+  BucketName:
+    Description: Bucket for versioning to be enabled on
+    Type: String
+    Default: ""
+
+Resources:
+  #Enable versionig on template bucket
+  UbloxBucket:
+    Type: AWS::S3::Bucket
+    # DeletionPolicy: Retain
+    Properties:
+      BucketName: !Ref BucketName
+      # VersioningConfiguration:
+      #   Status: Enabled
+      # LoggingConfiguration:
+      #   DestinationBucketName: ublox-log-bucket
+      #   LogFilePrefix: !Sub "Access-Logs/${BucketName}"
+      # Tags:
+      #  - Key: environment
+      #    Value: prod
+
+  #########Policy for Template Editors ###############
+  TemplateEditorsPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref UbloxBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: AllowAccessToS3Actions
+            Effect: Allow
+            Action:
+              - "s3:GetObject"
+              - "s3:PutObject"
+              - "s3:ListBucket"
+            Resource:
+              - !Join ["", ["arn:aws:s3:::", !Ref BucketName]]
+              - !Join ["", ["arn:aws:s3:::", !Ref BucketName, "/*"]]
+            Principal:
+              AWS:
+                - "arn:aws:iam::805739551663:role/SysMaster"
+          - Sid: DenyBucketPolicyModification
+            Effect: Deny
+            Action:
+              - "s3:DeleteBucketPolicy"
+              - "s3:PutBucketPolicy"
+              - "s3:DeleteBucket"
+              - "s3:GetObject"
+              # - 's3:PutObject'
+              # - 's3:ListBucket'
+            Resource:
+              - !Join ["", ["arn:aws:s3:::", !Ref BucketName]]
+              - !Join ["", ["arn:aws:s3:::", !Ref BucketName, "/*"]]
+            Condition:
+              ArnNotEquals:
+                "aws:PrincipalArn": "arn:aws:iam::805739551663:role/SysMaster"
+            Principal:
+              AWS:
+                - "*"
+          # - Sid: OneUserExceptionPutObject
+          #   Effect: Allow
+          #   Action:
+          #    - 's3:PutObject'
+          #   Resource:
+          #     - !Join [ '', ['arn:aws:s3:::', !Ref BucketName] ]
+          #     - !Join [ '', ['arn:aws:s3:::', !Ref BucketName, '/*'] ]
+          #   Condition:
+          #     StringEquals:
+          #      "x-amz-grant-write": "arn:aws:iam::805739551663:user/dono-test-user"
+          #   Principal:
+          #     AWS:
+          #        - "arn:aws:iam::805739551663:user/dono-test-user"

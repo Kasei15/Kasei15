@@ -1,0 +1,27 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AccessS3Bucket",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject"
+            ],
+            "Resource": "arn:aws:s3:::testpocsftpublox"
+        },
+        {
+            "Sid": "AllowKMSAccess",
+            "Effect": "Allow",
+            "Action": [
+                "kms:Decrypt",
+                "kms:GenerateDataKey",
+                "kms:ReEncryptFrom",
+                "kms:ReEncryptTo",
+                "kms:DescribeKey",
+                "kms:Encrypt",
+                "kms:GenerateDataKey"
+            ],
+            "Resource": "arn:aws:kms:eu-west-1:458853966598:key/c63bf3ef-1344-4bb7-b8d1-3abd9d7ffc46"
+        }
+    ]
+}

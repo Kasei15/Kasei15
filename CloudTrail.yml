@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: Cloud Trail for Auditing purpose
+
+
+Parameters:
+  TrailBucket:
+      Description: Bucket for CloudTrail
+      Type: String
+      Default: ""
+
+Resources:
+     cloudTrail:
+       Type: AWS::CloudTrail::Trail
+       Properties:
+         S3BucketName: !Ref TrailBucket
+         IncludeGlobalServiceEvents:  false
+         IsLogging: true 
+         S3KeyPrefix: 
+         SnsTopicName: 

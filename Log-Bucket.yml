@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: Template Create Ublox Log Bucket
+
+Resources:
+     
+########## Logging Bucket #########
+    UbloxLogBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+           BucketName: ublox-log-bucket
+           Tags:
+            - Key: environment
+              Value: prod
+           
+      
+
+    ############### Policy for the logging bucket ##############
+    LoggingBucketPolicy:
+       Type: AWS::S3::BucketPolicy
+       Properties:
+            Bucket: !Ref UbloxLogBucket
+            PolicyDocument:
+              Version: 2012-10-17
+              Statement:
+                - Action:
+                    - 's3:PutObject'
+                  Effect: Allow
+                  Principal: 
+                   Service: logging.s3.amazonaws.com
+                  Resource: !Join 
+                    - ''
+                    - - 'arn:aws:s3:::'
+                      - !Ref UbloxLogBucket
+                      - /*
+                  

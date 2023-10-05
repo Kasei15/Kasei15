@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: Policy to allow template modification to specific groups.
+
+Parameters:
+     ##Target Bucket ARN
+     BucketARN:
+      Type: String
+      Default: ""
+
+   
+
+Resources:
+     #IAM Policy for editing templates
+     UBloxIamPolicy:
+      Type: AWS::IAM::Policy
+      Properties:
+       PolicyName: AllowPutObject
+       Users: 
+        - 'dono-test-user'
+       PolicyDocument:
+         Version: "2012-10-17"
+         Statement:
+          - Effect: Allow
+            Action:
+            #  - 's3:GetObject'
+             - 's3:PutObject'
+            Resource: !Ref BucketARN
+          # - Effect: Allow
+          #   Action:
+          #    - 's3:ListAllMyBuckets'
+          #   Resource: "*"
+          
+           
